@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="crudApp">
+<head>
+    <meta charset="UTF-8">
+    <title>User Management</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="UserController as userCtrl">
+    <h1>User Management</h1>
+    <form ng-submit="userCtrl.addUser()" ng-show="!userCtrl.editMode">
+        <input type="text" ng-model="userCtrl.newUser.name" placeholder="Name" required>
+        <input type="email" ng-model="userCtrl.newUser.email" placeholder="Email" required>
+        <button type="submit">Add User</button>
+    </form>
+
+    <form ng-submit="userCtrl.updateUser()" ng-show="userCtrl.editMode">
+        <input type="text" ng-model="userCtrl.updatedUser.name" required>
+        <input type="email" ng-model="userCtrl.updatedUser.email" required>
+        <button type="submit">Update</button>
+        <button type="button" ng-click="userCtrl.cancelEdit()">Cancel</button>
+    </form>
+
+    <ul>
+        <li ng-repeat="user in userCtrl.users">
+            {{ user.name }} ({{ user.email }})
+            <button ng-click="userCtrl.editUser(user)">Edit</button>
+            <button ng-click="userCtrl.deleteUser(user)">Delete</button>
+        </li>
+    </ul>
+
+    <script>
+        angular.module('crudApp', [])
+            .controller('UserController', function() {
+                var vm = this;
+                vm.users = [
+                    { id: 1, name: 'John Doe', email: 'john@example.com' },
+                    { id: 2, name: 'Jane Doe', email: 'jane@example.com' }
+                ];
+                vm.newUser = {};
+                vm.updatedUser = {};
+                vm.editMode = false;
+
+                vm.addUser = function() {
+                    vm.newUser.id = vm.users.length + 1;
+                    vm.users.push(vm.newUser);
+                    vm.newUser = {};
+                };
+
+                vm.editUser = function(user) {
+                    vm.editMode = true;
+                    vm.updatedUser = angular.copy(user);
+                };
+
+                vm.updateUser = function() {
+                    for (var i = 0; i < vm.users.length; i++) {
+                        if (vm.users[i].id === vm.updatedUser.id) {
+                            vm.users[i] = vm.updatedUser;
+                            break;
+                        }
+                    }
+                    vm.updatedUser = {};
+                    vm.editMode = false;
+                };
+
+                vm.cancelEdit = function() {
+                    vm.updatedUser = {};
+                    vm.editMode = false;
+                };
+
+                vm.deleteUser = function(user) {
+                    var index = vm.users.indexOf(user);
+                    vm.users.splice(index, 1);
+                };
+            });
+    </script>
+</body>
+</html>

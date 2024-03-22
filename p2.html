@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="shoppingApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping List</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+angular.module('shoppingApp', [])
+    .controller('ShoppingController', function($scope) {
+        $scope.items = [];
+
+        $scope.addItem = function() {
+            if ($scope.newItem) {
+                $scope.items.push($scope.newItem);
+                $scope.newItem = '';
+            }
+        };
+
+        $scope.removeItem = function(index) {
+            $scope.items.splice(index, 1);
+        };
+    })
+    .directive('shoppingList', function() {
+        return {
+            restrict: 'E',
+            scope: {
+                items: '=',
+                removeItem: '&'
+            },
+            template: `
+                <ul>
+                    <li ng-repeat="item in items">
+                        {{ item }}
+                        <button ng-click="removeItem({index: $index})">Remove</button>
+                    </li>
+                </ul>
+            `
+        };
+    });
+</script>
+</head>
+<body>
+    <div ng-controller="ShoppingController">
+        <h2>Shopping List</h2>
+        <label>Add Item:</label>
+        <input type="text" ng-model="newItem">
+        <button ng-click="addItem()">Add</button>
+
+        <shopping-list items="items" remove-item="removeItem(index)"></shopping-list>
+    </div>
+</body>
+</html>
+

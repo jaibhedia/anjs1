@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="calcApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Factorial and Square Calculator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+angular.module('calcApp', [])
+    .controller('CalcController', function($scope) {
+        $scope.inputNumber = 0;
+        $scope.result = 0;
+        $scope.showResult = false;
+        $scope.resultType = '';
+
+        $scope.calculateFactorial = function() {
+            $scope.resultType = 'factorial';
+            $scope.showResult = true;
+            $scope.result = factorial($scope.inputNumber);
+        };
+
+        $scope.calculateSquare = function() {
+            $scope.resultType = 'square';
+            $scope.showResult = true;
+            $scope.result = $scope.inputNumber * $scope.inputNumber;
+        };
+
+        function factorial(n) {
+            if (n === 0 || n === 1)
+                return 1;
+            else {
+                var result = 1;
+                for (var i = 2; i <= n; i++) {
+                    result *= i;
+                }
+                return result;
+            }
+        }
+    });
+</script>
+</head>
+<body>
+    <div ng-controller="CalcController">
+        <h2>Factorial and Square Calculator</h2>
+        <label>Enter a number: </label>
+        <input type="number" ng-model="inputNumber">
+        <button ng-click="calculateFactorial()">Calculate Factorial</button>
+        <button ng-click="calculateSquare()">Calculate Square</button>
+
+        <div ng-show="showResult">
+            <p ng-show="resultType === 'factorial'">Factorial of {{ inputNumber }} is: {{ result }}</p>
+            <p ng-show="resultType === 'square'">Square of {{ inputNumber }} is: {{ result }}</p>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="todoApp">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do List</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="TodoController as todoCtrl">
+    <h1>To-Do List</h1>
+    <form ng-submit="todoCtrl.addTask()">
+        <input type="text" ng-model="todoCtrl.newTask" placeholder="Enter new task">
+        <button type="submit">Add Task</button>
+    </form>
+
+    <ul>
+        <li ng-repeat="task in todoCtrl.tasks">
+            <span ng-show="!task.editing">{{ task.name }}</span>
+            <input type="text" ng-model="task.name" ng-show="task.editing">
+            <button ng-click="todoCtrl.editTask(task)">Edit</button>
+            <button ng-click="todoCtrl.deleteTask(task)">Delete</button>
+            <button ng-click="todoCtrl.saveTask(task)" ng-show="task.editing">Save</button>
+            <button ng-click="todoCtrl.cancelEdit(task)" ng-show="task.editing">Cancel</button>
+        </li>
+    </ul>
+
+    <script>
+        angular.module('todoApp', [])
+            .controller('TodoController', function() {
+                var vm = this;
+                vm.tasks = [
+                    { name: 'Task 1', editing: false },
+                    { name: 'Task 2', editing: false },
+                    { name: 'Task 3', editing: false }
+                ];
+
+                vm.newTask = '';
+
+
+                vm.addTask = function() {
+                    if (vm.newTask.trim() !== '') {
+                        vm.tasks.push({ name: vm.newTask, editing: false });
+                        vm.newTask = '';
+                    }
+                };
+
+                vm.editTask = function(task) {
+                    task.editing = true;
+                };
+
+                vm.saveTask = function(task) {
+                    task.editing = false;
+                };
+
+                vm.cancelEdit = function(task) {
+                    task.editing = false;
+                };
+
+                vm.deleteTask = function(task) {
+                    var index = vm.tasks.indexOf(task);
+                    if (index !== -1) {
+                        vm.tasks.splice(index, 1);
+                    }
+                };
+            });
+    </script>
+</body>
+</html>

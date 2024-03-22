@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="random">
+<head>
+  <meta charset="utf-8">
+  <title>Random Number Generator</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body>
+  <div ng-controller="RandomController">
+    <h1>Random Number Generator</h1> 
+    <label>Enter the max number: </label>
+    <input type="number" ng-model="rand">
+    <button ng-click="generateRandom()">Generate Random Number</button>
+    <br>
+    <p ng-show="randomNumber">Your Random Number is: {{ randomNumber }}</p> <script>
+      angular.module('random', [])
+        .controller('RandomController', function($scope) {
+          $scope.rand = 0;
+          $scope.randomNumber = 0; 
+
+          $scope.generateRandom = function() {
+  let randomNum = Math.random() * $scope.rand;  
+  $scope.randomNumber = Math.round(randomNum) // Round to 2 decimal places 
+};
+        });
+    </script>
+  </div>
+</body>
+</html>

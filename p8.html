@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="loginApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Form</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body ng-controller="LoginController as loginCtrl">
+    <h1>Login</h1>
+    <form name="loginForm" ng-submit="loginCtrl.submitForm()" novalidate>
+        <div>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" ng-model="loginCtrl.user.username" required>
+            <span class="error" ng-show="loginForm.username.$dirty && loginForm.username.$error.required">Username is required</span>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" ng-model="loginCtrl.user.password" required>
+            <span class="error" ng-show="loginForm.password.$dirty && loginForm.password.$error.required">Password is required</span>
+        </div>
+        <button type="submit" ng-disabled="loginForm.$invalid">Login</button>
+    </form>
+
+    <script>
+        angular.module('loginApp', [])
+            .controller('LoginController', function() {
+                var vm = this;
+                vm.user = {
+                    username: '',
+                    password: ''
+                };
+                vm.submitForm = function() {
+                    if (vm.user.username === 'admin' && vm.user.password === 'password') {
+                        alert('Login successful!');
+                    } else {
+                        alert('Invalid username or password');
+                    }
+                };
+            });
+    </script>
+</body>
+</html>
